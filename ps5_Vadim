@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Твоя PS5 — уже всё скачано</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Caveat:wght@600&display=swap');
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(11,13,18,0.88);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .topnav-inner{
+    max-width:980px; margin:0 auto; padding:0 24px;
+    display:flex; align-items:center; gap:4px;
+    height:54px;
+  }
+  .topnav-logo{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:.88rem;
+    color:rgba(255,255,255,0.35); margin-right:12px; white-space:nowrap;
+    letter-spacing:.04em;
+  }
+  .topnav a{
+    font-family:'Space Grotesk',sans-serif; font-size:.82rem; font-weight:600;
+    color:rgba(255,255,255,0.55); text-decoration:none;
+    padding:7px 14px; border-radius:8px;
+    transition:background .18s, color .18s;
+    white-space:nowrap;
+  }
+  .topnav a:hover{ background:rgba(255,255,255,0.08); color:#e9ecf1; }
+  .topnav-divider{ width:1px; height:20px; background:rgba(255,255,255,0.1); margin:0 2px; flex:none; }
+  @media(max-width:560px){
+    .topnav-logo{ display:none; }
+    .topnav a{ padding:7px 10px; font-size:.78rem; }
+  }
+
+  :root{
+    --bg:#0b0d12;
+    --surface:#12151c;
+    --border:rgba(255,255,255,0.08);
+    --text:#e9ecf1;
+    --muted:#8d94a3;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- setup page ---------- */
+  .setup-page{
+    padding:72px 0 56px; border-bottom:2px solid var(--border);
+  }
+  .setup-page h2{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:clamp(1.6rem,4vw,2.5rem); margin-bottom:10px;
+  }
+  .setup-lede{ color:var(--muted); font-size:1rem; max-width:600px; margin-bottom:36px; }
+
+  .setup-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media(max-width:680px){ .setup-grid{ grid-template-columns:1fr; } }
+
+  .setup-card{
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:16px; padding:28px;
+  }
+  .setup-card h3{
+    font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600;
+    text-transform:uppercase; letter-spacing:.14em; color:var(--muted); margin-bottom:18px;
+  }
+  .cred-row{ display:flex; flex-direction:column; gap:3px; margin-bottom:16px; }
+  .cred-row:last-child{ margin-bottom:0; }
+  .cred-label{ font-size:.72rem; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); }
+  .cred-val{
+    font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600;
+    color:var(--text); word-break:break-all;
+  }
+
+  .codes-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+  .code-pill{
+    font-family:'Space Grotesk',sans-serif; font-size:.9rem; font-weight:600;
+    background:rgba(255,255,255,0.06); border:1px solid var(--border);
+    border-radius:7px; padding:6px 13px; letter-spacing:.08em;
+    color:var(--text);
+  }
+
+  .how-list{ display:flex; flex-direction:column; gap:14px; }
+  .how-step{ display:flex; gap:14px; align-items:flex-start; }
+  .how-num{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:.9rem;
+    min-width:28px; height:28px; border-radius:50%;
+    border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center;
+    color:var(--muted); flex:none; margin-top:2px;
+  }
+  .how-text{ font-size:.95rem; color:var(--text); opacity:.85; }
+  .how-text strong{ color:var(--text); opacity:1; font-weight:600; }
+
+  /* ---------- future games ---------- */
+  .future-card{
+    position:relative;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:32px;
+    margin-bottom:16px;
+    display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start;
+  }
+  .future-badge{
+    font-family:'Space Grotesk',sans-serif; font-size:.7rem;
+    text-transform:uppercase; letter-spacing:.18em;
+    color:var(--bg); background:var(--accent2);
+    padding:4px 12px; border-radius:999px; white-space:nowrap; align-self:start;
+  }
+  .future-card h3{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:1.5rem; margin-bottom:6px;
+  }
+  .future-card .tagline{ color:var(--accent2); font-weight:500; font-size:.95rem; margin-bottom:10px; }
+  .future-card p{ color:var(--text); opacity:.8; font-size:.95rem; }
+  .future-card .trailer-link{ margin-top:14px; display:inline-flex; }
+  @media(max-width:600px){ .future-card{ grid-template-columns:1fr; } .future-badge{ justify-self:start; } }
+
+  /* ---------- header ---------- */
+  header.intro{ padding:72px 0 36px; border-bottom:1px solid var(--border); }
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.22em;
+    font-size:.75rem;
+    color:var(--muted);
+    margin-bottom:14px;
+  }
+  header.intro h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(2rem,5vw,3.1rem);
+    line-height:1.15;
+    margin-bottom:22px;
+    max-width:760px;
+  }
+  header.intro .lede{
+    color:var(--muted);
+    font-size:1.05rem;
+    max-width:620px;
+  }
+  header.intro .lede + .lede{ margin-top:12px; }
+  .status-bar{
+    display:flex; gap:28px; flex-wrap:wrap;
+    margin-top:32px; padding-top:28px; border-top:1px solid var(--border);
+  }
+  .status-bar div{ font-family:'Space Grotesk',sans-serif; }
+  .status-bar .num{ font-size:1.6rem; font-weight:700; }
+  .status-bar .lbl{ font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; margin-top:2px; }
+
+  /* ---------- quick nav ---------- */
+  .quicknav{
+    display:flex; flex-wrap:wrap; gap:10px;
+    padding:28px 0 8px;
+  }
+  .quicknav a{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 16px; border:1px solid var(--border); border-radius:999px;
+    color:var(--text); text-decoration:none; font-size:.85rem;
+    font-family:'Space Grotesk',sans-serif; font-weight:500;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .quicknav a:hover{ transform:translateY(-2px); border-color:var(--dot); }
+  .quicknav .dot{ width:8px; height:8px; border-radius:50%; background:var(--dot); flex:none; }
+
+  /* ---------- section titles ---------- */
+  .section-title{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.85rem; text-transform:uppercase; letter-spacing:.24em;
+    color:var(--muted);
+    margin:70px 0 8px;
+  }
+  .section-sub{ color:var(--muted); font-size:.95rem; margin-bottom:24px; max-width:560px; }
+
+  /* ---------- game card ---------- */
+  .game-card{
+    display:grid;
+    grid-template-columns: 300px 1fr;
+    gap:40px;
+    padding:40px 0;
+    border-top:1px solid var(--border);
+  }
+  .game-card:nth-of-type(even) .art-panel{ order:2; }
+
+  .art-panel{
+    aspect-ratio:1;
+    border-radius:18px;
+    border:1px solid var(--border);
+    background:
+      radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+      var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .art-panel svg{ width:100%; height:100%; color:var(--accent); }
+  .art-panel .tag{
+    position:absolute; top:14px; left:14px;
+    font-family:'Space Grotesk',sans-serif; font-size:.7rem;
+    letter-spacing:.18em; text-transform:uppercase;
+    color:var(--accent); opacity:.8;
+  }
+
+  .content{ display:flex; flex-direction:column; justify-content:center; }
+  .content .index{
+    font-family:'Space Grotesk',sans-serif; font-size:.78rem;
+    color:var(--accent); letter-spacing:.2em; text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .content h3{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:1.85rem; margin-bottom:6px; line-height:1.2;
+  }
+  .content .tagline{
+    color:var(--accent); font-weight:500; font-size:.98rem; margin-bottom:14px;
+  }
+  .content p.description{
+    color:var(--text); opacity:.82; max-width:580px; margin-bottom:18px;
+  }
+
+  .ratings{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .rating-badge{
+    border:1px solid var(--border); border-radius:9px;
+    padding:7px 13px; font-size:.8rem;
+    font-family:'Space Grotesk',sans-serif;
+    display:flex; gap:7px; align-items:baseline; color:var(--muted);
+  }
+  .rating-badge strong{ color:var(--accent); font-size:1.05rem; }
+
+  .actions{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:6px; }
+  .trailer-link{
+    display:inline-flex; align-items:center; gap:9px;
+    color:#0b0d12; background:var(--accent);
+    padding:11px 20px; border-radius:999px; text-decoration:none;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:.88rem;
+    transition:filter .2s ease;
+  }
+  .trailer-link:hover{ filter:brightness(1.12); }
+  .trailer-link svg{ width:16px; height:16px; }
+
+  .sticky-note{
+    font-family:'Caveat',cursive; font-size:1.25rem;
+    color:var(--accent); margin-top:20px;
+    padding-left:16px; border-left:2px solid var(--accent);
+  }
+  .sticky-note span{ color:var(--muted); font-family:'Inter',sans-serif; font-size:.75rem; display:block; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; font-weight:600;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--border);
+    margin-top:70px; padding:48px 0 80px;
+    color:var(--muted); font-size:.92rem; max-width:620px;
+  }
+  footer .signoff{
+    font-family:'Caveat',cursive; font-size:1.4rem; color:var(--text); margin-top:14px;
+  }
+
+  @media (max-width:760px){
+    .game-card{ grid-template-columns:1fr; gap:24px; }
+    .game-card:nth-of-type(even) .art-panel{ order:0; }
+    .art-panel{ max-width:260px; margin:0 auto; }
+    .status-bar{ gap:20px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <span class="topnav-logo">🎮 PS5</span>
+    <div class="topnav-divider"></div>
+    <a href="#setup">Как управлять</a>
+    <a href="#games">Открывай — всё стоит</a>
+    <a href="#coming-soon">Будущие игры</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ================= SETUP PAGE ================= -->
+  <section class="setup-page" id="setup">
+    <div class="eyebrow">Сначала · как войти и начать</div>
+    <h2>Как управлять своей PS5</h2>
+    <p class="setup-lede">Аккаунт уже настроен, игры скачаны. Ниже — все данные для входа и краткая инструкция, что вообще делать когда приставка перед тобой.</p>
+
+    <div class="setup-grid">
+
+      <div class="setup-card">
+        <h3>🔐 Данные аккаунта PlayStation</h3>
+        <div class="cred-row">
+          <span class="cred-label">Логин (email)</span>
+          <span class="cred-val">roelsgfoldieak@outlook.com</span>
+        </div>
+        <div class="cred-row">
+          <span class="cred-label">Пароль от PS Account</span>
+          <span class="cred-val">yTX8#f7e</span>
+        </div>
+        <div class="cred-row">
+          <span class="cred-label">Пароль от почты Outlook<br><span style="font-size:.7rem;opacity:.6">(если придёт код подтверждения)</span></span>
+          <span class="cred-val">qSuGcGeuKXjPnd</span>
+        </div>
+      </div>
+
+      <div class="setup-card">
+        <h3>🔑 Резервные коды PS5</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Одноразовые коды — если система запросит дополнительную верификацию. Используй любой из них по одному разу.</p>
+        <div class="codes-grid">
+          <span class="code-pill">PrH7EP</span>
+          <span class="code-pill">Pcundf</span>
+          <span class="code-pill">mvNcNc</span>
+          <span class="code-pill">XTPEcN</span>
+          <span class="code-pill">tShLRQ</span>
+          <span class="code-pill">7GqLC2</span>
+          <span class="code-pill">NstPG7</span>
+          <span class="code-pill">CZaqhP</span>
+          <span class="code-pill">S3dTTr</span>
+          <span class="code-pill">MKvVRK</span>
+        </div>
+      </div>
+
+      <div class="setup-card" style="grid-column:1/-1">
+        <h3>▶️ Как запустить игру — 5 шагов</h3>
+        <div class="how-list">
+          <div class="how-step"><div class="how-num">1</div><div class="how-text">Включи PS5 кнопкой на корпусе или зажми <strong>PS-кнопку</strong> (большая по центру) на контроллере.</div></div>
+          <div class="how-step"><div class="how-num">2</div><div class="how-text">На главном экране видишь иконки игр — листай влево/вправо стиком или крестовиной. Все установленные игры уже там.</div></div>
+          <div class="how-step"><div class="how-num">3</div><div class="how-text">Выбери игру, нажми <strong>X</strong> — запустится сразу, без загрузки диска.</div></div>
+          <div class="how-step"><div class="how-num">4</div><div class="how-step"><div class="how-num">4</div><div class="how-text">В игре: <strong>X</strong> — действие/прыжок, <strong>○</strong> — назад/отмена, <strong>△</strong> — взаимодействие, <strong>□</strong> — атака/доп. действие. Каждая игра объясняет управление сама в обучении.</div></div></div>
+          <div class="how-step"><div class="how-num">5</div><div class="how-text">Пауза — кнопка <strong>Options</strong> (правая маленькая). Выход в меню — зажми <strong>PS</strong> и выбери «Закрыть игру».</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <header class="intro" id="games">
+    <div class="eyebrow">Подарок · подписка активна · 11 игр установлено</div>
+    <h1>Открывай, всё уже стоит. Выбирай и играй — изучать каталог не пришлось.</h1>
+    <p class="lede">Я знаю, что листать магазин и читать описания — последнее, чем хочется заниматься после рабочего дня. Поэтому подписку я уже оформил, а игры — скачал и поставил сам. Тут девять разных игр: есть для долгих вечеров с сюжетом, и есть для того, чтобы просто включить и подраться/погонять с друзьями.</p>
+    <p class="lede">Ниже — что это за игры, почему я выбрал именно их и чего от каждой ждать. Если что-то совсем не зайдёт — место есть, можно снести и поставить другое.</p>
+    <div class="status-bar">
+      <div><div class="num">11</div><div class="lbl">игр готово</div></div>
+      <div><div class="num">3</div><div class="lbl">ожидаются</div></div>
+      <div><div class="num">0</div><div class="lbl">минут на поиск</div></div>
+    </div>
+  </header>
+
+  <nav class="quicknav">
+    <a href="#got" style="--dot:#C4A86A"><span class="dot"></span>Ghost of Tsushima</a>
+    <a href="#goy" style="--dot:#B8C9A0"><span class="dot"></span>Ghost of Yōtei</a>
+    <a href="#tlou1" style="--dot:#7C9473"><span class="dot"></span>The Last of Us I</a>
+    <a href="#tlou2" style="--dot:#B6594A"><span class="dot"></span>The Last of Us II</a>
+    <a href="#rdr2" style="--dot:#D99A56"><span class="dot"></span>RDR2</a>
+    <a href="#hzd" style="--dot:#E2954C"><span class="dot"></span>Horizon Zero Dawn</a>
+    <a href="#dbh" style="--dot:#5AA9E6"><span class="dot"></span>Detroit: Become Human</a>
+    <a href="#gowr" style="--dot:#8FB8D6"><span class="dot"></span>God of War Ragnarök</a>
+    <a href="#fc26" style="--dot:#5FBF77"><span class="dot"></span>EA Sports FC 26</a>
+    <a href="#undisputed" style="--dot:#D6B24E"><span class="dot"></span>Undisputed</a>
+    <a href="#ufc5" style="--dot:#E0584A"><span class="dot"></span>UFC 5</a>
+  </nav>
+
+  <!-- ================= GROUP 1: STORY GAMES ================= -->
+  <div class="section-title">Часть 1 · На вечер с сюжетом</div>
+  <p class="section-sub">Это игры, в которые проваливаешься, как в сериал — есть герои, история и атмосфера. Не нужно «уметь играть», достаточно сидеть и проходить в своём темпе.</p>
+
+  <!-- Ghost of Tsushima -->
+  <section class="game-card" id="got" style="--accent:#C4A86A">
+    <div class="art-panel">
+      <span class="tag">Open World / Самурай</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="120" y1="20" x2="120" y2="210" stroke="currentColor" stroke-width="2.5"/>
+        <line x1="70" y1="80" x2="172" y2="80" stroke="currentColor" stroke-width="2"/>
+        <line x1="56" y1="68" x2="70" y2="80" stroke="currentColor" stroke-width="2"/>
+        <line x1="184" y1="68" x2="172" y2="80" stroke="currentColor" stroke-width="2"/>
+        <path d="M60 190 Q 90 160 120 155 Q 150 160 182 190" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="120" cy="78" r="5" fill="currentColor" opacity="0.7"/>
+        <path d="M30 130 Q 70 115 120 118 Q 170 115 210 130" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+        <path d="M30 148 Q 70 135 120 137 Q 170 135 210 148" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">01 / 11 — Сюжетные игры</div>
+      <h3>Ghost of Tsushima</h3>
+      <div class="tagline">Лучший самурайский фильм, в котором ты сам — самурай</div>
+      <p class="description">Японский остров Цусима захвачен монгольскими войсками, и самурай Дзин Сакай вынужден отступить от кодекса бусидо, чтобы стать «призраком» — скрытным воином вне всяких правил. Игра ощущается как визуальная поэзия: режим «Кинематограф» буквально снимает постоянные скриншоты за тебя. Боевая система изящная и выразительная, открытый мир огромный и красивый — и это всё без лишнего мусора в виде вышек и маркеров.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~87</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Strong»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Ghost+of+Tsushima+Director+Cut+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Включи японскую озвучку вместо английской — атмосфера становится совсем другой.</div>
+    </div>
+  </section>
+
+  <!-- Ghost of Yotei -->
+  <section class="game-card" id="goy" style="--accent:#B8C9A0">
+    <div class="art-panel">
+      <span class="tag">Open World / Самурай</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 210 Q 60 170 120 130 Q 180 170 220 210" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+        <path d="M60 220 L 60 110 Q 60 80 120 60 Q 180 80 180 110 L 180 220" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
+        <path d="M120 60 L 80 30 L 90 65" stroke="currentColor" stroke-width="2"/>
+        <path d="M120 60 L 160 30 L 150 65" stroke="currentColor" stroke-width="2"/>
+        <circle cx="120" cy="62" r="4" fill="currentColor" opacity="0.6"/>
+        <line x1="120" y1="62" x2="120" y2="210" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="120" cy="130" r="7" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">02 / 11 — Сюжетные игры</div>
+      <h3>Ghost of Yōtei</h3>
+      <div class="tagline">Сиквел Ghost of Tsushima — новая героиня, новая месть, та же красота</div>
+      <p class="description">Действие разворачивается через 300 лет после первой игры — в 1603 году, на диких землях вокруг горы Ётэй на Хоккайдо. Новая героиня Ацу — наёмница, которую убийцы из «Шестёрки Ётэй» приговорили к смерти, но она выжила и охотится на каждого из них по очереди. Игровой мир стал ещё свободнее: можно разбить лагерь в любой точке карты, охотиться за целями в любом порядке и строить костёр прямо под звёздами. Вышла в октябре 2025, только на PS5.</p>
+      <div class="ratings">
+        <div class="rating-badge">Выход <strong>октябрь 2025</strong></div>
+        <div class="rating-badge">Только <strong>PS5</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Ghost+of+Yotei+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Не обязательно играть в первую часть, но если сыграл — кайф будет в два раза больше.</div>
+    </div>
+  </section>
+
+  <!-- TLOU 1 -->
+  <section class="game-card" id="tlou1" style="--accent:#7C9473">
+    <div class="art-panel">
+      <span class="tag">Action / Драма</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="120" r="86" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 7" opacity="0.45"/>
+        <path d="M30 205 C 80 150, 140 165, 122 100 S 178 45, 212 32" stroke="currentColor" stroke-width="2"/>
+        <circle cx="68" cy="72" r="3" fill="currentColor"/>
+        <circle cx="160" cy="58" r="4" fill="currentColor" opacity="0.7"/>
+        <circle cx="182" cy="142" r="2.5" fill="currentColor"/>
+        <circle cx="92" cy="172" r="3.5" fill="currentColor" opacity="0.6"/>
+        <circle cx="42" cy="112" r="2" fill="currentColor"/>
+        <circle cx="200" cy="182" r="3" fill="currentColor" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">03 / 11 — Сюжетные игры</div>
+      <h3>The Last of Us Part I</h3>
+      <div class="tagline">Видеоигра, которая работает как хорошее кино</div>
+      <p class="description">История о том, как контрабандист Джоэл сопровождает девочку Элли через США, пережившие эпидемию. По сути это драма про потерю, привязанность и выживание — поданная через постановку, диалоги и актёрскую игру на уровне фильма. На PS5 это полностью пересобранный ремейк 2022 года: графика и анимации лиц — топ для консоли. Геймплейно — спокойный темп, упор на историю и атмосферу, а не на реакцию.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~88</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Strong»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=The+Last+of+Us+Part+I+remake+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Лучше с наушниками — звук и музыка тут половина впечатления.</div>
+    </div>
+  </section>
+
+  <!-- TLOU 2 -->
+  <section class="game-card" id="tlou2" style="--accent:#B6594A">
+    <div class="art-panel">
+      <span class="tag">Action / Драма</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="120" r="86" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 7" opacity="0.45"/>
+        <path d="M120 70 C 80 90, 50 112, 60 162 C 92 150, 116 130, 120 110" stroke="currentColor" stroke-width="2"/>
+        <path d="M120 70 C 160 90, 190 112, 180 162 C 148 150, 124 130, 120 110" stroke="currentColor" stroke-width="2"/>
+        <line x1="120" y1="68" x2="120" y2="162" stroke="currentColor" stroke-width="2"/>
+        <circle cx="108" cy="103" r="3" fill="currentColor" opacity="0.6"/>
+        <circle cx="134" cy="124" r="2.5" fill="currentColor" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">04 / 11 — Сюжетные игры</div>
+      <h3>The Last of Us Part II</h3>
+      <div class="tagline">Самая обсуждаемая и самая титулованная игра последних лет</div>
+      <p class="description">Прямое продолжение — спустя несколько лет Элли отправляется в путь, который превращается в историю о цикле насилия и мести. Темнее, тяжелее и эмоционально жёстче первой части, но технически это один из самых проработанных проектов в принципе — анимации, лица персонажей, постановка сцен. По версии Книги рекордов Гиннесса, это самая отмечаемая наградами игра в истории. Лучше проходить после первой части — иначе потеряется половина смысла.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~93</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Mighty»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=The+Last+of+Us+Part+II+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Местами тяжело морально — если зайдёт не сразу, можно сделать паузу на день.</div>
+    </div>
+  </section>
+
+  <!-- RDR2 -->
+  <section class="game-card" id="rdr2" style="--accent:#D99A56">
+    <div class="art-panel">
+      <span class="tag">Open World / Вестерн</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="150" x2="220" y2="150" stroke="currentColor" stroke-width="2"/>
+        <circle cx="120" cy="108" r="32" stroke="currentColor" stroke-width="2"/>
+        <line x1="120" y1="58" x2="120" y2="48" stroke="currentColor" stroke-width="2"/>
+        <line x1="70" y1="108" x2="58" y2="108" stroke="currentColor" stroke-width="2"/>
+        <line x1="170" y1="108" x2="182" y2="108" stroke="currentColor" stroke-width="2"/>
+        <path d="M20 150 L 58 112 L 90 140 L 142 88 L 182 150" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>
+        <path d="M64 190 L 76 172 L 88 190" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M148 198 L 160 178 L 174 198" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">05 / 11 — Сюжетные игры</div>
+      <h3>Red Dead Redemption 2</h3>
+      <div class="tagline">Можно просто сесть на лошадь и кататься — и это уже хорошо</div>
+      <p class="description">От создателей GTA — история бандита Артура Моргана в последние годы эпохи Дикого Запада, когда старый мир доживает свои дни. Один из самых высоко оценённых проектов в истории видеоигр в целом. Огромный живой мир: охота, города, случайные встречи, ограбления — можно играть месяцами, а можно просто бесцельно ехать и смотреть закат. Подходит и для расслабленного исследования, и для динамичного экшена.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~97</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Mighty»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Red+Dead+Redemption+2+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Не торопись по сюжету в первые часы — лучшее в игре часто происходит само, по дороге.</div>
+    </div>
+  </section>
+
+  <!-- Horizon Zero Dawn -->
+  <section class="game-card" id="hzd" style="--accent:#E2954C">
+    <div class="art-panel">
+      <span class="tag">Open World / RPG</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="178" cy="58" r="22" stroke="currentColor" stroke-width="2"/>
+        <line x1="178" y1="26" x2="178" y2="16" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="178" y1="100" x2="178" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="80" y="110" width="70" height="35" stroke="currentColor" stroke-width="2" transform="rotate(-8 115 127)"/>
+        <line x1="90" y1="145" x2="80" y2="196" stroke="currentColor" stroke-width="2"/>
+        <line x1="115" y1="148" x2="108" y2="200" stroke="currentColor" stroke-width="2"/>
+        <line x1="135" y1="148" x2="142" y2="200" stroke="currentColor" stroke-width="2"/>
+        <line x1="150" y1="142" x2="165" y2="192" stroke="currentColor" stroke-width="2"/>
+        <path d="M85 112 L 60 80" stroke="currentColor" stroke-width="2"/>
+        <path d="M85 112 L 64 100 L 48 90" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="100" cy="120" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">06 / 11 — Сюжетные игры</div>
+      <h3>Horizon Zero Dawn</h3>
+      <div class="tagline">Постапокалипсис, где природа победила, а вместо динозавров — роботы</div>
+      <p class="description">Охотница Элой выживает в мире, который заново заросло дикой природой, а по равнинам бродят механические звери, похожие на динозавров. Геймплей строится на луке, скрытности и крафте — нужно изучать слабые места машин и готовиться к каждой охоте. Один из самых красивых открытых миров на PS5 со своим неожиданным сай-фай поворотом сюжета.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~89</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Strong»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Horizon+Zero+Dawn+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Зайдёт, если любишь собирать ресурсы и постепенно прокачиваться.</div>
+    </div>
+  </section>
+
+  <!-- Detroit Become Human -->
+  <section class="game-card" id="dbh" style="--accent:#5AA9E6">
+    <div class="art-panel">
+      <span class="tag">Интерактивная драма</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 50 C 70 55, 60 80, 65 105 C 68 130, 85 150, 110 152 L 115 172 L 130 172 L 128 150 C 145 145, 155 125, 152 100 C 150 75, 130 50, 105 48 Z" stroke="currentColor" stroke-width="2"/>
+        <circle cx="100" cy="85" r="4" fill="currentColor"/>
+        <path d="M150 95 L 188 95 L 188 70 L 214 70" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M150 122 L 196 122 L 196 152 L 218 152" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="214" cy="70" r="3" fill="currentColor"/>
+        <circle cx="218" cy="152" r="3" fill="currentColor"/>
+        <line x1="30" y1="205" x2="220" y2="205" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">07 / 11 — Сюжетные игры</div>
+      <h3>Detroit: Become Human</h3>
+      <div class="tagline">Кино, в котором каждое решение реально меняет историю</div>
+      <p class="description">Интерактивная драма о восстании андроидов в Детройте недалёкого будущего: ты ведёшь сразу трёх персонажей, чьи судьбы переплетаются. Геймплея здесь по минимуму — это история и выбор, причём по-настоящему разветвлённый: десятки разных финалов, и «проиграть» в привычном смысле почти невозможно. Хороший вариант для тех, кто не хочет «учиться играть», а хочет смотреть и влиять на сюжет.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~78</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Strong»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Detroit+Become+Human+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Нет геймовера — есть только «другая» концовка. Можно не бояться ошибиться.</div>
+    </div>
+  </section>
+
+  <!-- God of War Ragnarok -->
+  <section class="game-card" id="gowr" style="--accent:#8FB8D6">
+    <div class="art-panel">
+      <span class="tag">Action / Мифология</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="120" r="80" stroke="currentColor" stroke-width="1.5" opacity="0.45"/>
+        <g stroke="currentColor" stroke-width="2">
+          <line x1="120" y1="40" x2="120" y2="52"/>
+          <line x1="120" y1="188" x2="120" y2="200"/>
+          <line x1="40" y1="120" x2="52" y2="120"/>
+          <line x1="188" y1="120" x2="200" y2="120"/>
+          <line x1="63" y1="63" x2="72" y2="72"/>
+          <line x1="168" y1="168" x2="177" y2="177"/>
+          <line x1="177" y1="63" x2="168" y2="72"/>
+          <line x1="72" y1="168" x2="63" y2="177"/>
+        </g>
+        <line x1="120" y1="58" x2="120" y2="182" stroke="currentColor" stroke-width="3"/>
+        <path d="M120 75 L 80 60 L 75 96 L 120 106 Z" stroke="currentColor" stroke-width="2"/>
+        <path d="M120 75 L 160 60 L 165 96 L 120 106 Z" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">08 / 11 — Сюжетные игры</div>
+      <h3>God of War Ragnarök</h3>
+      <div class="tagline">Отец и сын против скандинавских богов — зрелищно как блокбастер</div>
+      <p class="description">Прямое продолжение God of War (2018): Кратос и его сын Атрей оказываются в центре скандинавского «конца света». Боевая система с топором и цепями динамичная и эффектная, постановка роликов и боссов — на уровне крупного фильма, а отношения между персонажами вытягивают всю историю. Одна из самых высоко оценённых эксклюзивных игр PS5 — отлично смотрится даже если просто наблюдать со стороны.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~94</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Mighty»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=God+of+War+Ragnarok+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Даже если не любишь сложные бои — можно снизить сложность в настройках в любой момент.</div>
+    </div>
+  </section>
+
+  <!-- ================= GROUP 2: SPORTS/COMPETITIVE ================= -->
+  <div class="section-title">Часть 2 · На вечер с друзьями</div>
+  <p class="section-sub">Эти три — для коротких партий, дивана и контроллера на двоих. Не требуют вложений по сюжету, можно зайти на 20 минут.</p>
+
+  <!-- EA Sports FC 26 -->
+  <section class="game-card" id="fc26" style="--accent:#5FBF77">
+    <div class="art-panel">
+      <span class="tag">Спорт / Футбол</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="98" r="50" stroke="currentColor" stroke-width="2"/>
+        <path d="M120 50 L 145 90 L 95 90 Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M85 110 L 120 90 L 155 110 L 140 145 L 100 145 Z" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="20" y1="205" x2="220" y2="205" stroke="currentColor" stroke-width="2"/>
+        <rect x="78" y="172" width="84" height="33" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="100" y="188" width="40" height="17" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">09 / 11 — На вечер с друзьями</div>
+      <h3>EA Sports FC 26</h3>
+      <div class="tagline">Бывшая FIFA — тот самый футбол, только под новым именем</div>
+      <p class="description">Важный момент: бренд FIFA в этой серии больше не используется — с прошлого года игра называется EA Sports FC, но это всё тот же футбольный симулятор с лицензированными клубами и сборными. FC 26 — самая свежая часть, с обновлённым режимом карьеры менеджера и игрока, турнирами в Ultimate Team и большим набором сборных. Хорошо подходит, чтобы быстро сыграть матч вдвоём на одном диване.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~75</strong></div>
+        <div class="rating-badge">Жанр <strong>спорт-сим</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=EA+Sports+FC+26+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Если давно не играл в FIFA — управление почти такое же, быстро вспомнишь.</div>
+    </div>
+  </section>
+
+  <!-- Undisputed -->
+  <section class="game-card" id="undisputed" style="--accent:#D6B24E">
+    <div class="art-panel">
+      <span class="tag">Спорт / Бокс</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M70 130 C 60 100, 75 70, 100 65 C 120 60, 135 75, 138 95 L 145 140 C 148 165, 130 185, 105 185 C 85 185, 70 165, 68 145 Z" stroke="currentColor" stroke-width="2"/>
+        <line x1="60" y1="120" x2="38" y2="115" stroke="currentColor" stroke-width="2"/>
+        <line x1="172" y1="58" x2="172" y2="200" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+        <line x1="40" y1="58" x2="220" y2="58" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <line x1="40" y1="98" x2="220" y2="98" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+        <line x1="40" y1="58" x2="40" y2="200" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+        <circle cx="40" cy="58" r="4" fill="currentColor"/>
+        <circle cx="172" cy="58" r="4" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">10 / 11 — На вечер с друзьями</div>
+      <h3>Undisputed</h3>
+      <div class="tagline">Серьёзный бокс-симулятор — первый лицензированный с 2011 года</div>
+      <p class="description">Более 70 настоящих боксёров — от Тайсона Фьюри до Канело Альвареса, реалистичная физика ударов, повреждения лица в реальном времени и полноценная карьера от новичка до чемпиона. В отличие от аркадных файтингов, тут реально важны позиционирование, дистанция и выносливость — игра скорее про тактику, чем про спам ударов. Понравится, если в принципе интересен бокс как спорт. По отзывам — крепкий старт с потенциалом, но не без шероховатостей.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>~71</strong></div>
+        <div class="rating-badge">Доступна <strong>в PS Plus</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=Undisputed+boxing+game+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>Перед первым боем загляни в обучение — без него легко словить нокаут за 10 секунд.</div>
+    </div>
+  </section>
+
+  <!-- UFC 5 -->
+  <section class="game-card" id="ufc5" style="--accent:#E0584A">
+    <div class="art-panel">
+      <span class="tag">Спорт / MMA</span>
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="90,40 150,40 200,90 200,150 150,200 90,200 40,150 40,90" stroke="currentColor" stroke-width="2"/>
+        <circle cx="120" cy="120" r="6" fill="currentColor"/>
+        <g stroke="currentColor" stroke-width="1" opacity="0.4">
+          <line x1="120" y1="120" x2="90" y2="40"/>
+          <line x1="120" y1="120" x2="150" y2="40"/>
+          <line x1="120" y1="120" x2="200" y2="90"/>
+          <line x1="120" y1="120" x2="200" y2="150"/>
+          <line x1="120" y1="120" x2="150" y2="200"/>
+          <line x1="120" y1="120" x2="90" y2="200"/>
+          <line x1="120" y1="120" x2="40" y2="150"/>
+          <line x1="120" y1="120" x2="40" y2="90"/>
+        </g>
+      </svg>
+    </div>
+    <div class="content">
+      <div class="index">11 / 11 — На вечер с друзьями</div>
+      <h3>UFC 5</h3>
+      <div class="tagline">ММА со всеми звёздами октагона — можно устроить свой турнир</div>
+      <p class="description">Самая свежая часть симулятора UFC от EA: улучшенная графика на движке Frostbite, переработанный партер и более жёсткая, заметная система повреждений. В ростере — больше 300 бойцов и режимы от быстрого боя до полноценной карьеры. Критики называют игру крепким, хоть и не революционным шагом вперёд по сравнению с предыдущей частью — но как «диванный» вечер с друзьями работает отлично.</p>
+      <div class="ratings">
+        <div class="rating-badge">Metacritic <strong>78</strong></div>
+        <div class="rating-badge">OpenCritic <strong>«Strong»</strong></div>
+      </div>
+      <div class="actions">
+        <a class="trailer-link" href="https://www.youtube.com/results?search_query=UFC+5+official+trailer" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Трейлер на YouTube
+        </a>
+      </div>
+      <div class="sticky-note"><span>от меня</span>В быстром бою можно сразу выбрать любимого бойца — не обязательно проходить карьеру.</div>
+    </div>
+  </section>
+
+  <!-- ================= FUTURE GAMES ================= -->
+  <div class="section-title" id="coming-soon" style="margin-top:80px">Часть 3 · Скоро выйдет — уже ждём</div>
+  <p class="section-sub">Эти три игры ещё не вышли, но уже на слуху. Когда появятся — скачаем.</p>
+
+  <div class="future-card" style="--accent2:#D6954A">
+    <div>
+      <h3>Forza Horizon 6</h3>
+      <div class="tagline">Гонки по Японии — Токио, горы, сакура и 550 машин</div>
+      <p>Новая часть самой красивой аркадной гоночной серии — на этот раз действие переносится в Японию: Токио, горные перевалы и рельеф вокруг Фудзи. На Xbox и ПК игра вышла 19 мая 2026, для PS5 подтверждена в «второй половине 2026 года» без точной даты. Около 550 машин на старте, уклон в японскую автокультуру — кей-кары, тюнинг, тоге-гонки. Первая Forza Horizon на PlayStation после трёхлетнего перерыва.</p>
+      <a class="trailer-link" href="https://www.youtube.com/results?search_query=Forza+Horizon+6+official+trailer" target="_blank" rel="noopener" style="background:#D6954A;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M8 5v14l11-7z"/></svg>
+        Трейлер на YouTube
+      </a>
+    </div>
+    <span class="future-badge" style="background:#D6954A">2026 · PS5</span>
+  </div>
+
+  <div class="future-card" style="--accent2:#E84545">
+    <div>
+      <h3>Grand Theft Auto VI</h3>
+      <div class="tagline">Самая ожидаемая игра десятилетия — дата наконец есть</div>
+      <p>GTA 6 выходит 19 ноября 2026 на PS5 и Xbox Series X/S. Действие разворачивается в вымышленном штате Леонида, вдохновлённом Флоридой, с Вайс-Сити в центре — это первый GTA за 13 лет. Два главных героя: Джейсон и Люсия. Rockstar дважды переносил дату, объясняя нехваткой времени для полировки — судя по трейлерам, это будет что-то невероятное. ПК-версии на старте нет.</p>
+      <a class="trailer-link" href="https://www.youtube.com/results?search_query=GTA+6+official+trailer" target="_blank" rel="noopener" style="background:#E84545;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M8 5v14l11-7z"/></svg>
+        Трейлер на YouTube
+      </a>
+    </div>
+    <span class="future-badge" style="background:#E84545">19 нояб 2026 · PS5</span>
+  </div>
+
+  <div class="future-card" style="--accent2:#8FB8D6">
+    <div>
+      <h3>God of War: Laufey</h3>
+      <div class="tagline">Впервые без Кратоса — играем за Фэй, его жену, в загробном мире</div>
+      <p>Объявлена 2 июня 2026 на PlayStation State of Play — первая игра серии с новым главным героем. Фэй (Лауфей) — жена Кратоса, которая погибла до событий GoW 2018. Здесь она неожиданно просыпается в «Вечно-где» (Everywhen) — загробном мире, где боги из разных мифологий борются за власть. Нужно пробиться через этот мир, чтобы защитить Кратоса и Атрея. По инсайдерским данным, планируемый выход — первая половина 2027 года. Официальной даты ещё нет.</p>
+      <a class="trailer-link" href="https://www.youtube.com/watch?v=MCg5A1Jupi0" target="_blank" rel="noopener" style="background:#8FB8D6;color:#0b0d12">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M8 5v14l11-7z"/></svg>
+        Трейлер на YouTube
+      </a>
+    </div>
+    <span class="future-badge" style="background:#8FB8D6;color:#0b0d12">~2027 · PS5</span>
+  </div>
+
+  <footer>
+    <p>Рейтинги — ориентировочные данные с Metacritic и OpenCritic на момент подготовки списка, у конкретной версии для PS5 цифра может отличаться на пару пунктов. Ссылки на трейлеры ведут на поиск YouTube — так точно откроется актуальное видео, а не сломанная ссылка.</p>
+    <p class="signoff">Приятной игры — и с днём рождения 🎮</p>
+  </footer>
+
+</div>
+</body>
+</html>
